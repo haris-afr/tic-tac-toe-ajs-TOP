@@ -71,3 +71,27 @@ h1, h2, h3, h4, h5, h6 {
     --custom-grey: #E0E6EF; 
     --ominous-yellow : #F9BD34;
 }
+
+.infoboard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-weight: bold;
+  font-size: 2rem;
+
+  padding: 20px;
+}
+
+.buttons{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.buttons button{
+  padding: 5px 15px;
+}

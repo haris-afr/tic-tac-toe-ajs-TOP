@@ -14,10 +14,26 @@
 // If you’re having trouble, Building a house from the inside out is a great article that lays out a highly applicable example 
 // both of how you might approach tackling this project as well as how you might organize and structure your code.
 
-let gameboardArray = [];
-//create gameboard class
+
+
+const gameboardObj = (() => {
+    let gameboardArray = [];
+
+    //func initialize()
+    //func newRound()
+    //func resetAll()
+    
+    //func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
+
+})();
+
 
 let playerScore = 0;
 let comScore = 0;
+let tieScore = 0;
 
-//func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
+const playerScoreElm = document.getElementById("player-score");
+const comScoreElm = document.getElementById("com-score");
+const tieScoreElm = document.getElementById("tie-score");
+
+
