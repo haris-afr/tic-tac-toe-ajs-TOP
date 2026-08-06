@@ -13,16 +13,24 @@
 
 // If you’re having trouble, Building a house from the inside out is a great article that lays out a highly applicable example 
 // both of how you might approach tackling this project as well as how you might organize and structure your code.
-
+const gameboardEle = document.querySelector(".gameboard");
 
 
 const gameboardObj = (() => {
     let gameboardArray = [];
 
-    //func initialize()
+    const initialize = () => {
+        for (let i = 0; i < 9; i++){
+            const gameboardTile = document.createElement("button");
+            gameboardTile.id = "gameboard-tile-" + i + 1;
+            gameboardArray.push(gameboardTile);
+
+            gameboardEle.appendChild(gameboardTile);
+        }
+    }
     //func newRound()
     //func resetAll()
-    
+
     //func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
 
 })();
@@ -36,4 +44,4 @@ const playerScoreElm = document.getElementById("player-score");
 const comScoreElm = document.getElementById("com-score");
 const tieScoreElm = document.getElementById("tie-score");
 
-
+gameboardObj.initialize();
