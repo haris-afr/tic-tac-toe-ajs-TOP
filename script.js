@@ -25,14 +25,19 @@ const gameboardObj = (() => {
             gameboardTile.id = "gameboard-tile-" + i + 1;
             gameboardArray.push(gameboardTile);
 
+            gameboardTile.textContent = "X";
+
             gameboardEle.appendChild(gameboardTile);
         }
+
+        return;
     }
     //func newRound()
     //func resetAll()
 
     //func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
 
+    return {initialize};
 })();
 
 
