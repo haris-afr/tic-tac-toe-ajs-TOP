@@ -14,7 +14,7 @@
 // If you’re having trouble, Building a house from the inside out is a great article that lays out a highly applicable example 
 // both of how you might approach tackling this project as well as how you might organize and structure your code.
 const gameboardEle = document.querySelector(".gameboard");
-
+const resetAllButtonEle = document.querySelector("#reset-all-button");
 
 const gameboardObj = (() => {
     let gameboardArray = [];
@@ -35,7 +35,22 @@ const gameboardObj = (() => {
     }
 
     function doComTurn(){
-        console.log("do com turn");
+        let continueLoop;
+        let randomTile;
+        let spacesChecked = 0;
+        do{
+            continueLoop = false;
+            randomTile = gameboardArray[Math.floor(Math.random() * gameboardArray.length)];
+            if (randomTile.classList.contains("cross") || randomTile.classList.contains("circle")){
+                continueLoop = true;
+            }
+            spacesChecked++;
+        }
+        while(continueLoop == true && spacesChecked < 100);
+
+        if (spacesChecked < 99){
+            setTileCircle(randomTile);
+        }
     }
 
     const initialize = () => {
@@ -50,11 +65,10 @@ const gameboardObj = (() => {
 
         gameboardArray.forEach((element, index, array) => {
             element.addEventListener("click", e => {
-                if (!element.classList.contains("empty")){
-                    console.log("hi");
+                if (element.classList.contains("cross") || element.classList.contains("circle")){
                     return;
                 }
-                setTileCross(e);
+                setTileCross(element);
                 doComTurn();
             })
         });
@@ -62,18 +76,22 @@ const gameboardObj = (() => {
         return;
     }
 
-
-    
-
-    const onClick = (id) => {
-        
+    function newRound(){
+        gameboardArray.forEach((element, index, array) => {
+            setTileEmpty(element);
+        });
     }
-    //func newRound()
-    //func resetAll()
+
+    const resetAll = () => {
+        newRound();
+        playerScore = 0;
+        comScore = 0;
+        tieScore = 0;
+    }
 
     //func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
 
-    return {initialize, onClick};
+    return {initialize, resetAll};
 })();
 
 
@@ -84,5 +102,7 @@ let tieScore = 0;
 const playerScoreElm = document.getElementById("player-score");
 const comScoreElm = document.getElementById("com-score");
 const tieScoreElm = document.getElementById("tie-score");
+
+resetAllButtonEle.addEventListener("click", e => {gameboardObj.resetAll()});
 
 gameboardObj.initialize();
