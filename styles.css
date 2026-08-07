@@ -98,6 +98,8 @@ body{
 
 .gameboard button{
   padding: 5px 15px;
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .infoboard{

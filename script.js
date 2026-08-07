@@ -19,25 +19,61 @@ const gameboardEle = document.querySelector(".gameboard");
 const gameboardObj = (() => {
     let gameboardArray = [];
 
+    function setTileEmpty(element){
+        element.classList = "empty";
+        element.textContent = "";
+    }
+
+    function setTileCross(element){
+        element.classList = "cross";
+        element.textContent = "X";
+    }
+
+    function setTileCircle(element){
+        element.classList = "circle";
+        element.textContent = "O";
+    }
+
+    function doComTurn(){
+        console.log("do com turn");
+    }
+
     const initialize = () => {
         for (let i = 0; i < 9; i++){
             const gameboardTile = document.createElement("button");
-            gameboardTile.id = "gameboard-tile-" + i + 1;
+            gameboardTile.id = "gameboard-tile-" + (i + 1);
             gameboardArray.push(gameboardTile);
-
-            gameboardTile.textContent = "X";
+            setTileEmpty(gameboardTile);
 
             gameboardEle.appendChild(gameboardTile);
         }
 
+        gameboardArray.forEach((element, index, array) => {
+            element.addEventListener("click", e => {
+                if (!element.classList.contains("empty")){
+                    console.log("hi");
+                    return;
+                }
+                setTileCross(e);
+                doComTurn();
+            })
+        });
+
         return;
+    }
+
+
+    
+
+    const onClick = (id) => {
+        
     }
     //func newRound()
     //func resetAll()
 
     //func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
 
-    return {initialize};
+    return {initialize, onClick};
 })();
 
 
