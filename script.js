@@ -1,24 +1,24 @@
 "use strict";
 
-// You’re going to store the gameboard as an array inside of a Gameboard object, so start there! 
-// Your players are also going to be stored in objects, and you’re probably going to want an object to control the flow of the game itself.
 
-// Your main goal here is to have as little global code as possible. Try tucking as much as you can inside factories. 
-// If you only need a single instance of something (e.g. the gameboard, the displayController etc.) then wrap the factory inside an IIFE (module pattern) 
-// so it cannot be reused to create additional instances.
-
-// In this project, think carefully about where each bit of logic should reside. 
-// Each little piece of functionality should be able to fit in the game, player or gameboard objects. Take care to put them in “logical” places. 
-// Spending a little time brainstorming here can make your life much easier later!
-
-// If you’re having trouble, Building a house from the inside out is a great article that lays out a highly applicable example 
-// both of how you might approach tackling this project as well as how you might organize and structure your code.
 const gameboardEle = document.querySelector(".gameboard");
 const resetAllButtonEle = document.querySelector("#reset-all-button");
 
 const gameboardObj = (() => {
     let gameboardArray = [];
-    let emptyArray = []; //finish this part of the code
+    let emptyArray = [];
+    let circleArray = [];
+    let crossArray = [];
+
+    const diagonal_one = ["gameboard-tile-1", "gameboard-tile-5", "gameboard-tile-9"];
+    const diagonal_two = ["gameboard-tile-3", "gameboard-tile-5", "gameboard-tile-7"];
+    const horizontal_one = ["gameboard-tile-1", "gameboard-tile-2", "gameboard-tile-3"];
+    const horizontal_two= ["gameboard-tile-4", "gameboard-tile-5", "gameboard-tile-6"];
+    const horizontal_three = ["gameboard-tile-7", "gameboard-tile-8", "gameboard-tile-9"];
+    const vertical_one = ["gameboard-tile-1", "gameboard-tile-4", "gameboard-tile-7"];
+    const vertical_two = ["gameboard-tile-2", "gameboard-tile-5", "gameboard-tile-8"];
+    const vertical_three = ["gameboard-tile-3", "gameboard-tile-6", "gameboard-tile-9"];
+    const winConditions = [diagonal_one, diagonal_two, horizontal_one, horizontal_two, horizontal_three, vertical_one, vertical_two, vertical_three];
 
     function setTileEmpty(element){
         element.classList = "empty";
@@ -29,6 +29,8 @@ const gameboardObj = (() => {
         element.classList = "cross";
         element.textContent = "X";
 
+        crossArray.push(element.id);
+        
         let emptyArrayIndex = emptyArray.indexOf(element);
         emptyArray.splice(emptyArrayIndex, 1);
     }
@@ -36,6 +38,8 @@ const gameboardObj = (() => {
     function setTileCircle(element){
         element.classList = "circle";
         element.textContent = "O";
+
+        circleArray.push(element.id);
 
         let emptyArrayIndex = emptyArray.indexOf(element);
         emptyArray.splice(emptyArrayIndex, 1);
@@ -46,7 +50,12 @@ const gameboardObj = (() => {
             return;
         }
         setTileCross(elementClicked);
-        doComTurn();
+
+        let gameWon = checkIfGameFinished();
+        
+        if (gameWon == false){
+            doComTurn();
+        }
     }
 
     function doComTurn(){
@@ -56,9 +65,21 @@ const gameboardObj = (() => {
         
         const randInt =  Math.floor(Math.random() * emptyArray.length);
         let randomTile = emptyArray[randInt];
-        console.log(randInt);
-        console.log(emptyArray);
         setTileCircle(randomTile);
+        checkIfGameFinished();
+    }
+
+    function updatePlayerScore(updateBy = 1, reset = 0){
+        playerScore += updateBy;
+        playerScoreElm.textContent = playerScore;
+    }
+
+    function updateComScore(updateBy = 1, reset = 0){
+        comScore += updateBy;
+    }
+
+    function updateTieScore(updateBy = 1, reset = 0){
+        tieScore += updateBy;
     }
 
     const initialize = () => {
@@ -94,7 +115,32 @@ const gameboardObj = (() => {
         tieScore = 0;
     }
 
-    //func checkIfGameWon() {check if any straights or diagonals inside gameboardArray}
+    function checkIfGameFinished() {
+        if (emptyArray.length == 0){
+            updateTieScore(+1);
+            newRound();
+            return true;
+
+        }
+
+        winConditions.forEach((element, index, array) =>{
+            if (element.every(item => crossArray.includes(item))){
+                updatePlayerScore(+1);
+                newRound(); //TODO change this to a button click
+                return true;
+            }
+        });
+
+        winConditions.forEach((element, index, array) =>{
+            if (element.every(item => circleArray.includes(item))){
+                updateComScore(+1);
+                newRound(); //TODO change this to a button click
+                return true;
+            }
+        });
+
+        return false;
+    }
 
     return {initialize, resetAll};
 })();
