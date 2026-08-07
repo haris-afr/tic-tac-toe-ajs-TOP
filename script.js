@@ -18,6 +18,7 @@ const resetAllButtonEle = document.querySelector("#reset-all-button");
 
 const gameboardObj = (() => {
     let gameboardArray = [];
+    let emptyArray = []; //finish this part of the code
 
     function setTileEmpty(element){
         element.classList = "empty";
@@ -27,30 +28,37 @@ const gameboardObj = (() => {
     function setTileCross(element){
         element.classList = "cross";
         element.textContent = "X";
+
+        let emptyArrayIndex = emptyArray.indexOf(element);
+        emptyArray.splice(emptyArrayIndex, 1);
     }
 
     function setTileCircle(element){
         element.classList = "circle";
         element.textContent = "O";
+
+        let emptyArrayIndex = emptyArray.indexOf(element);
+        emptyArray.splice(emptyArrayIndex, 1);
+    }
+
+    function doPlayerTurn(elementClicked){
+        if (elementClicked.classList.contains("cross") || elementClicked.classList.contains("circle")){
+            return;
+        }
+        setTileCross(elementClicked);
+        doComTurn();
     }
 
     function doComTurn(){
-        let continueLoop;
-        let randomTile;
-        let spacesChecked = 0;
-        do{
-            continueLoop = false;
-            randomTile = gameboardArray[Math.floor(Math.random() * gameboardArray.length)];
-            if (randomTile.classList.contains("cross") || randomTile.classList.contains("circle")){
-                continueLoop = true;
-            }
-            spacesChecked++;
+        if (emptyArray.length == 0){
+            return;
         }
-        while(continueLoop == true && spacesChecked < 100);
-
-        if (spacesChecked < 99){
-            setTileCircle(randomTile);
-        }
+        
+        const randInt =  Math.floor(Math.random() * emptyArray.length);
+        let randomTile = emptyArray[randInt];
+        console.log(randInt);
+        console.log(emptyArray);
+        setTileCircle(randomTile);
     }
 
     const initialize = () => {
@@ -63,14 +71,10 @@ const gameboardObj = (() => {
             gameboardEle.appendChild(gameboardTile);
         }
 
+        emptyArray = Array.from(gameboardArray);
+
         gameboardArray.forEach((element, index, array) => {
-            element.addEventListener("click", e => {
-                if (element.classList.contains("cross") || element.classList.contains("circle")){
-                    return;
-                }
-                setTileCross(element);
-                doComTurn();
-            })
+            element.addEventListener("click", e => {doPlayerTurn(element);})
         });
 
         return;
@@ -80,6 +84,7 @@ const gameboardObj = (() => {
         gameboardArray.forEach((element, index, array) => {
             setTileEmpty(element);
         });
+        emptyArray = Array.from(gameboardArray);
     }
 
     const resetAll = () => {
